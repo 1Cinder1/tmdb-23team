@@ -97,9 +97,20 @@ public class SelectImpl implements edu.whu.tmdb.query.operations.Select {
         //最终返回selectResult
         return selectResult;
     }
-
+    /**
+     * 限制结果集中的元组数量。
+     *
+     * @param limit 要返回的最大元组数量。
+     * @param selectResult 原始的 SelectResult 对象。
+     * @return 一个新的 SelectResult 对象，包含最多 'limit' 数量的元组。
+     */
     private SelectResult limit(int limit,SelectResult selectResult) {
-        // TODO-task9
+        // task9
+        int len = selectResult.getTpl().tuplelist.size();
+        if (limit <= len) {
+            int deleteElememts = len - limit;
+            selectResult.getTpl().tuplelist.subList(len - deleteElememts, len).clear();
+        }
         return selectResult;
     }
 
