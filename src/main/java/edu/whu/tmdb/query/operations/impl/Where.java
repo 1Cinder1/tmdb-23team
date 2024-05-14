@@ -4,6 +4,7 @@ import au.edu.rmit.bdm.Torch.base.model.Coordinate;
 import au.edu.rmit.bdm.Torch.base.model.TrajEntry;
 import au.edu.rmit.bdm.Torch.base.model.Trajectory;
 import au.edu.rmit.bdm.Torch.queryEngine.model.SearchWindow;
+import cn.hutool.core.bean.BeanUtil;
 import edu.whu.tmdb.query.operations.Exception.ErrorList;
 import edu.whu.tmdb.storage.memory.MemManager;
 import edu.whu.tmdb.query.operations.torch.TorchConnect;
@@ -50,7 +51,11 @@ public class Where {
      * @param selectResult 待筛选的selectResult
      * @return 筛选之后的selectResult
      */
-    public SelectResult execute(Expression expression, SelectResult selectResult) throws TMDBException, IOException {
+    public SelectResult
+
+
+
+    execute(Expression expression, SelectResult selectResult) throws TMDBException, IOException {
         SelectResult result = new SelectResult();
         if (selectResult.getTpl().tuplelist.isEmpty()) {
             return selectResult;
@@ -59,12 +64,23 @@ public class Where {
         switch (opt){
             case "AndExpression":
                 result = andExpression((AndExpression) expression, selectResult); break;
+            case "OrExpression":
+                result = orExpression((OrExpression) expression, selectResult); break;
             case "InExpression":
                 result = inExpression((InExpression) expression, selectResult); break;
             case "EqualsTo":
                 result = equalsToExpression((EqualsTo) expression, selectResult); break;
+            case "MinorThan":
+                result = minorThan((MinorThan) expression, selectResult); break;
+            case "MinorThanEquals":
+                result = minorThanEquals((MinorThanEquals) expression, selectResult); break;
+            case "GreaterThan":
+                result = greaterThan((GreaterThan) expression, selectResult); break;
+            case "GreaterThanEquals":
+                result = greaterThanEquals((GreaterThanEquals) expression, selectResult); break;
             case "Function":
                 result = function((Function)expression, selectResult); break;
+
         }
         return result;
     }
@@ -196,7 +212,20 @@ public class Where {
 
     public SelectResult orExpression(OrExpression expression,SelectResult selectResult) throws TMDBException, IOException {
         // TODO-task7
-        return selectResult;
+        Expression left = expression.getLeftExpression();
+        Expression right = expression.getRightExpression();
+        SelectResult selectResult3 = new SelectResult();
+        BeanUtil.copyProperties(selectResult,selectResult3);
+        SelectResult selectResult1 = execute(left, selectResult);
+        SelectResult selectResult2 = execute(right, selectResult3);
+        HashSet<Tuple> selectResultSet1 = getTupleSet(selectResult1);
+        HashSet<Tuple> selectResultSet2 = getTupleSet(selectResult2);
+        HashSet<Tuple> union = new HashSet<>(selectResultSet2);
+        //将两个条件满足至少一个的Tuple加入union中
+        for(Tuple tuple:selectResultSet1){
+            if(!(selectResultSet2.contains(tuple))) union.add(tuple);
+        }
+        return getSelectResultFromSet(selectResult, union);
     }
 
     public SelectResult inExpression(InExpression expression, SelectResult selectResult) throws TMDBException, IOException {
@@ -240,26 +269,58 @@ public class Where {
 
     public SelectResult minorThan(MinorThan expression,SelectResult selectResult) throws TMDBException {
         // TODO-task6
-
-        return selectResult;
+        ArrayList<Object> left = formula.formulaExecute(expression.getLeftExpression(), selectResult);
+        ArrayList<Object> right = formula.formulaExecute(expression.getRightExpression(), selectResult);
+        HashSet<Tuple> set = new HashSet<>();
+        for (int i = 0; i < left.size(); i++) {
+            if (compare(left.get(i), right.get(i)) < 0) {
+                set.add(selectResult.getTpl().tuplelist.get(i));
+            }
+        }
+        return getSelectResultFromSet(selectResult, set);
+        //return selectResult;
     }
 
     public SelectResult minorThanEquals(MinorThanEquals expression, SelectResult selectResult) throws TMDBException {
         // TODO-task6
-
-        return selectResult;
+        ArrayList<Object> left = formula.formulaExecute(expression.getLeftExpression(), selectResult);
+        ArrayList<Object> right = formula.formulaExecute(expression.getRightExpression(), selectResult);
+        HashSet<Tuple> set = new HashSet<>();
+        for (int i = 0; i < left.size(); i++) {
+            if (compare(left.get(i), right.get(i)) <= 0) {
+                set.add(selectResult.getTpl().tuplelist.get(i));
+            }
+        }
+        return getSelectResultFromSet(selectResult, set);
+        //return selectResult;
     }
 
     public SelectResult greaterThan(GreaterThan expression, SelectResult selectResult) throws TMDBException {
         // TODO-task6
-
-        return selectResult;
+        ArrayList<Object> left = formula.formulaExecute(expression.getLeftExpression(), selectResult);
+        ArrayList<Object> right = formula.formulaExecute(expression.getRightExpression(), selectResult);
+        HashSet<Tuple> set = new HashSet<>();
+        for (int i = 0; i < left.size(); i++) {
+            if (compare(left.get(i), right.get(i)) > 0) {
+                set.add(selectResult.getTpl().tuplelist.get(i));
+            }
+        }
+        return getSelectResultFromSet(selectResult, set);
+        //return selectResult;
     }
 
     public SelectResult greaterThanEquals(GreaterThanEquals expression, SelectResult selectResult) throws TMDBException {
         // TODO-task6
-
-        return selectResult;
+        ArrayList<Object> left = formula.formulaExecute(expression.getLeftExpression(), selectResult);
+        ArrayList<Object> right = formula.formulaExecute(expression.getRightExpression(), selectResult);
+        HashSet<Tuple> set = new HashSet<>();
+        for (int i = 0; i < left.size(); i++) {
+            if (compare(left.get(i), right.get(i)) >= 0) {
+                set.add(selectResult.getTpl().tuplelist.get(i));
+            }
+        }
+        return getSelectResultFromSet(selectResult, set);
+        //return selectResult;
     }
 
     public HashSet<Tuple> getTupleSet(SelectResult selectResult){
