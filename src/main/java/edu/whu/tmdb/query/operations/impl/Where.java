@@ -55,7 +55,6 @@ public class Where {
 
 
 
-
     execute(Expression expression, SelectResult selectResult) throws TMDBException, IOException {
         SelectResult result = new SelectResult();
         if (selectResult.getTpl().tuplelist.isEmpty()) {
