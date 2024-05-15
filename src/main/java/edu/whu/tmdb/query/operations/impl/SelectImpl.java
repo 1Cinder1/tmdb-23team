@@ -355,10 +355,15 @@ public class SelectImpl implements edu.whu.tmdb.query.operations.Select {
         int indexInEntireResult = getIndexInEntireResult(entireResult, tableColumn.get(0), tableColumn.get(1));
 
         int index = projectResult.getAndIncrIndex();
-        projectResult.getAttrname()[index] = tableColumn.get(1);
-        projectResult.getClassName()[index] = tableColumn.get(0);
+        projectResult.getAlias()[index] = tableColumn.get(1);
+        projectResult.getClassName()[index] = tableColumn.get(0).isEmpty()?entireResult.getClassName()[indexInEntireResult]:tableColumn.get(0);
+        projectResult.getAttrid()[index] = entireResult.getAttrid()[indexInEntireResult];
+        projectResult.getType()[index] = entireResult.getType()[indexInEntireResult];
+
         if (alias != null && alias.isUseAs()) {
-            projectResult.getAlias()[index] = alias.getName();
+            projectResult.getAttrname()[index] = alias.getName();
+        }else{
+            projectResult.getAttrname()[index] = projectResult.getAlias()[index];
         }
         // 将计算结果填充到新的TupleList中
         for (int i = 0; i < dataList.size(); i++) {

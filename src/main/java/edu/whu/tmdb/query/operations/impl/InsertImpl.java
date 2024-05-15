@@ -123,7 +123,8 @@ public class InsertImpl implements Insert {
         // 1.2 将tuple转换为可插入的形式
         Object[] temp = new Object[attrNum];
         for (int i = 0; i < attrId.length; i++) {
-            temp[attrId[i]] = tuple.tuple[i];
+//            temp[attrId[i]] = tuple.tuple[i];
+            temp[i] = tuple.tuple[i];
         }
         tuple.setTuple(tuple.tuple.length, tupleid, classId, temp);
 
@@ -166,7 +167,9 @@ public class InsertImpl implements Insert {
 
             for (String originColumn : originColumns) {
                 if (switchingTableItem.oriAttr.equals(originColumn)) {
-                    attrNameHashMap.put(originColumn, switchingTableItem.oriAttr);
+//                    attrNameHashMap.put(originColumn, switchingTableItem.oriAttr);
+                    //怎么放oriAttr，有病吧
+                    attrNameHashMap.put(originColumn, switchingTableItem.deputyAttr);
                 }
             }
         }
@@ -200,10 +203,15 @@ public class InsertImpl implements Insert {
         Tuple deputyTuple = new Tuple();
         Object[] temp = new Object[attrNameHashMap.size()];
         int i = 0;
-        for(String originColumn : originColumns){
-            temp[i] = originTuple.tuple[originColumns.indexOf(originColumn)];
-            i++;
+        for (String key : attrNameHashMap.keySet()) {
+            String value = attrNameHashMap.get(key);
+            int originIndex = originColumns.indexOf(key);
+            temp[i++] = originTuple.tuple[originIndex];
         }
+//        for(String originColumn : originColumns){
+//            temp[i] = originTuple.tuple[originColumns.indexOf(originColumn)];
+//            i++;
+//        }
         deputyTuple.tuple = temp;
         return deputyTuple;
     }

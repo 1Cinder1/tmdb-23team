@@ -5,6 +5,11 @@ INSERT INTO company VALUES (cc,30,8000);
 INSERT INTO company VALUES ("dd",20,1000);
 INSERT INTO company VALUES ("ee",20,1000);
 INSERT INTO company VALUES ("ff",30,1000);
+CREATE SELECTDEPUTY deputy1  as SELECT name AS n, salary AS s FROM company;
+
+CREATE SELECTDEPUTY deputy1  as SELECT name, salary FROM company;
+
+CREATE GROUPDEPUTYCLASS deputy2 as SELECT salary from company group by salary
 
 
 SELECT name from company UNION SELECT name from company;

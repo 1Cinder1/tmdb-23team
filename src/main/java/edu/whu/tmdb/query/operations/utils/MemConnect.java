@@ -357,8 +357,11 @@ public class MemConnect {
 //        return attributeIds;
         ArrayList<Integer> deputyIdList = new ArrayList<>();
         for (BiPointerTableItem item : getBiPointerTableList()) {   //源类id列表
-            if(item.deputyobjectid == classId){         //代理类id=对应=源类id
-                deputyIdList.add(item.deputyobjectid);
+//            if(item.deputyobjectid == classId){         //代理类id=对应=源类id
+//                deputyIdList.add(item.deputyobjectid);
+//            }
+            if (item.classid == classId && !deputyIdList.contains(item.deputyid)) {
+                deputyIdList.add(item.deputyid);
             }
         }
 //        if (deputyIdList.isEmpty()) {

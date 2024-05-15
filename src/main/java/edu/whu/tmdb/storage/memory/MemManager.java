@@ -349,6 +349,11 @@ public class MemManager {
 
         // 存各个ClassTableItem
         for(ClassTableItem item : this.classTable.classTableList){
+//            if (item.classname == null || item.attrname == null ||
+//                item.attrtype == null || item.classtype == null || item.alias == null
+//            ) {
+//                continue;
+//            }
             // 存classid
             writeAccess.write(Constant.INT_TO_BYTES(item.classid));
             // 存attrnum
