@@ -166,7 +166,7 @@ public class InsertImpl implements Insert {
             }
 
             for (String originColumn : originColumns) {
-                if (switchingTableItem.oriAttr.equals(originColumn)) {
+                if (switchingTableItem.oriAttr != null &&  switchingTableItem.oriAttr.equals(originColumn)) {
 //                    attrNameHashMap.put(originColumn, switchingTableItem.oriAttr);
                     //怎么放oriAttr，有病吧
                     attrNameHashMap.put(originColumn, switchingTableItem.deputyAttr);

@@ -73,6 +73,9 @@ public class DeleteImpl implements Delete {
         // 删除代理对象中
         for (int i = 0; i < tupleList.tuplenum; i++) {
             for (int j = 0; j < MemConnect.getObjectTableList().size(); j++) {
+                if (j >= MemConnect.getBiPointerTableList().size()) {
+                    continue;
+                }
                 BiPointerTableItem tb = MemConnect.getBiPointerTableList().get(j);
                 if (tb.classid == tupleList.tuplelist.get(i).classId
                         && tb.objectid == tupleList.tuplelist.get(i).tupleId) {

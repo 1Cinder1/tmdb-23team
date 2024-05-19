@@ -9,8 +9,10 @@ CREATE SELECTDEPUTY deputy1  as SELECT name AS n, salary AS s FROM company;
 
 CREATE SELECTDEPUTY deputy1  as SELECT name, salary FROM company;
 
-CREATE GROUPDEPUTYCLASS deputy2 as SELECT salary from company group by salary
+CREATE GROUPDEPUTY deputy2 as SELECT salary from company group by salary
 
+
+CREATE SELECTDEPUTY deputy2 as SELECT salary from company group by salary
 
 SELECT name from company UNION SELECT name from company;
 SELECT name, AVG(salary) from company UNION SELECT name from company groupby name;
@@ -95,6 +97,7 @@ INSERT INTO company VALUES ("gg",20,3000);
 DELETE FROM company WHERE name="aa";
 //��
 UPDATE company SET salary=8000 WHERE name="gg";
+UPDATE company SET salary=7000 WHERE name='aa';
 
 SELECT n1 AS names,birth AS births,s1 AS salarys FROM nandb WHERE n1="gg";
 

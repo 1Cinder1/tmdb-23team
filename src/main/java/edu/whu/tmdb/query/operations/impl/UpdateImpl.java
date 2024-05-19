@@ -101,6 +101,7 @@ public class UpdateImpl implements Update {
         HashMap<Integer, ArrayList<Integer>> deputyId2AttrId = new HashMap<>();         // 满足where条件的deputyId -> deputyAttrIdList(其实也是index)
         HashMap<Integer, ArrayList<Object>> deputyId2UpdateValue = new HashMap<>();     // 满足where条件的deputyId -> 更新后的属性值列表(其实也是updateValue)
         for (SwitchingTableItem switchingTableItem : MemConnect.getSwitchingTableList()) {
+            // MemConnect.getSwitchingTableList()中的oriId来匹配
             if (switchingTableItem.oriId == classId && collect.contains(switchingTableItem.oriAttrid)) {
                 if (!deputyId2AttrId.containsKey(switchingTableItem.deputyId)) {
                     deputyId2AttrId.put(switchingTableItem.deputyId, new ArrayList<>());

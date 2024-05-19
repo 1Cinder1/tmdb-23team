@@ -9,7 +9,7 @@ package edu.whu.tmdb.query.operations.utils;/*
 
 public enum DeputyClassType {
     SELECT(1),  // 代理类1，表示select代理类
-    GROUPBY(2); // 代理类2，表示groupby代理类
+    GROUPDEPUTYCLASS(2); // 代理类2，表示groupby代理类
 
     private final int value;
 
